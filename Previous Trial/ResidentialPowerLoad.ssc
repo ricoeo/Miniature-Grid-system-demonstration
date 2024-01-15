@@ -1,0 +1,37 @@
+component ResidentialPowerLoad
+
+%the output power would have this shape i want
+    inputs
+        Power = { 0, 'W' }; % P: Left
+    end
+
+    nodes
+        p = foundation.electrical.electrical; % +:left
+        n = foundation.electrical.electrical; % -:right
+    end
+
+
+
+    variables
+        i = { 0, 'A' }; % Current
+        v = { 0, 'V' }; % Voltage
+    end
+
+    branches
+        i : p.i -> n.i;
+    
+    end
+
+    equations
+        %the voltage across the mode is the voltage at node p minus the voltage at node n
+        v ==   p.v - n.v; 
+
+        if v > 0
+            %change the current flowing through the load so that the variable resistor behavior is realized
+            i == Power/v;
+        else
+            i == 0;
+        end
+    end
+
+end
